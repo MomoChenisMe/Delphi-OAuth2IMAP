@@ -1,0 +1,115 @@
+object FormIMAPTest: TFormIMAPTest
+  Left = 0
+  Top = 0
+  Caption = 'IMAP-Test'
+  ClientHeight = 471
+  ClientWidth = 648
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object btn_Authorization_Code_Flow: TButton
+    Position.X = 8.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 185.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    Text = 'Use Authorization Code Flow'
+    OnClick = btn_Authorization_Code_FlowClick
+  end
+  object Memo1: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Position.X = 8.000000000000000000
+    Position.Y = 40.000000000000000000
+    Size.Width = 633.000000000000000000
+    Size.Height = 425.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    Viewport.Width = 629.000000000000000000
+    Viewport.Height = 421.000000000000000000
+  end
+  object btn_Test_outlook_IMAP: TButton
+    Position.X = 560.000000000000000000
+    Position.Y = 8.000000000000000000
+    TabOrder = 5
+    Text = 'Get IMAP'
+    OnClick = btn_Test_outlook_IMAPClick
+  end
+  object btn_Device_Auth_Flow: TButton
+    Position.X = 200.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 225.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 10
+    Text = 'Use Device Authorization Flow'
+    OnClick = btn_Device_Auth_FlowClick
+  end
+  object Button1: TButton
+    Position.X = 432.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 121.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 14
+    Text = 'Use ROPC Flow'
+    OnClick = Button1Click
+  end
+  object OAuth2_Authorization_Code: TsgcHTTP_OAuth2_Client
+    LocalServerOptions.IP = '127.0.0.1'
+    LocalServerOptions.Port = 8080
+    LocalServerOptions.RedirectURL = 'http://127.0.0.1:8080'
+    LocalServerOptions.SSL = False
+    LocalServerOptions.SSLOptions.VerifyCertificate = False
+    LocalServerOptions.SSLOptions.VerifyDepth = 0
+    LocalServerOptions.SSLOptions.Version = tlsUndefined
+    LocalServerOptions.SSLOptions.OpenSSL_Options.APIVersion = oslAPI_1_0
+    LocalServerOptions.SSLOptions.OpenSSL_Options.LibPath = oslpNone
+    LocalServerOptions.SSLOptions.OpenSSL_Options.UnixSymLinks = oslsSymLinksDefault
+    LocalServerOptions.SSLOptions.OpenSSL_Options.ECDHE = False
+    LocalServerOptions.SSLOptions.Port = 0
+    AuthorizationServerOptions.AuthURL = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
+    AuthorizationServerOptions.Scope.Strings = (
+      'https://outlook.office.com/IMAP.AccessAsUser.All')
+    AuthorizationServerOptions.TokenURL = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
+    OAuth2Options.GrantType = auth2Code
+    HTTPClientOptions.TLSOptions.VerifyCertificate = False
+    HTTPClientOptions.TLSOptions.VerifyDepth = 0
+    HTTPClientOptions.TLSOptions.Version = tlsUndefined
+    HTTPClientOptions.TLSOptions.IOHandler = iohOpenSSL
+    HTTPClientOptions.TLSOptions.OpenSSL_Options.APIVersion = oslAPI_1_0
+    HTTPClientOptions.TLSOptions.OpenSSL_Options.LibPath = oslpNone
+    HTTPClientOptions.TLSOptions.OpenSSL_Options.UnixSymLinks = oslsSymLinksDefault
+    HTTPClientOptions.TLSOptions.SChannel_Options.CertStoreName = scsnMY
+    HTTPClientOptions.TLSOptions.SChannel_Options.CertStorePath = scspStoreCurrentUser
+    OnAfterAuthorizeCode = OAuth2_Authorization_CodeAfterAuthorizeCode
+    OnAfterAccessToken = OAuth2_Authorization_CodeAfterAccessToken
+    Left = 480
+    Top = 80
+  end
+  object IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL
+    MaxLineAction = maException
+    Port = 0
+    DefaultPort = 0
+    SSLOptions.Mode = sslmUnassigned
+    SSLOptions.VerifyMode = []
+    SSLOptions.VerifyDepth = 0
+    Left = 480
+    Top = 144
+  end
+  object IdIMAP4: TIdIMAP4
+    IOHandler = IdSSLIOHandlerSocketOpenSSL1
+    Port = 993
+    Host = 'outlook.office365.com'
+    UseTLS = utUseImplicitTLS
+    SASLMechanisms = <>
+    AuthType = iatSASL
+    MilliSecsToWaitToClearBuffer = 10
+    Left = 480
+    Top = 208
+  end
+end
