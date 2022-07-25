@@ -28,6 +28,8 @@ type
     IdIMAP4: TIdIMAP4;
     btn_Device_Auth_Flow: TButton;
     Button1: TButton;
+    btn_Client_Credentials_Flow: TButton;
+    OAuth2_Client_Credentials: TsgcHTTP_OAuth2_Client;
     procedure btn_Authorization_Code_FlowClick(Sender: TObject);
     procedure OAuth2_Authorization_CodeAfterAuthorizeCode(Sender: TObject;
       const Code, State, Scope, RawParams: string; var Handled: Boolean);
@@ -39,6 +41,10 @@ type
     procedure btn_Device_Auth_FlowClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure btn_Client_Credentials_FlowClick(Sender: TObject);
+    procedure OAuth2_Client_CredentialsAfterAccessToken(Sender: TObject;
+      const Access_Token, Token_Type, Expires_In, Refresh_Token, Scope,
+      RawParams: string; var Handled: Boolean);
   private
     { Private declarations }
     xOAuthSASL: TIdSASLListEntry;
@@ -60,6 +66,12 @@ procedure TFormIMAPTest.btn_Authorization_Code_FlowClick(Sender: TObject);
 begin
   DoLog('Start Authorization Code Flow');
   OAuth2_Authorization_Code.Start;
+end;
+
+procedure TFormIMAPTest.btn_Client_Credentials_FlowClick(Sender: TObject);
+begin
+  DoLog('Start Client Credentials Flow');
+  OAuth2_Client_Credentials.Start;
 end;
 
 procedure TFormIMAPTest.btn_Device_Auth_FlowClick(Sender: TObject);
@@ -115,6 +127,13 @@ begin
   // Authorization Code Flow
   OAuth2_Authorization_Code.AuthorizationServerOptions.Scope.Add(SCOPE);
   OAuth2_Authorization_Code.OAuth2Options.ClientId := CLIENTID;
+
+  // 2022.07.18 ADD
+  // Client Credentials Flow
+  OAuth2_Client_Credentials.AuthorizationServerOptions.TokenURL := Format(CLIENTCREDENTIALSTOKENURL, [TENANTID]);
+  OAuth2_Client_Credentials.AuthorizationServerOptions.Scope.Add(SCOPE);
+  OAuth2_Client_Credentials.OAuth2Options.ClientId := CLIENTID;
+  OAuth2_Client_Credentials.OAuth2Options.ClientSecret := CLIENTSECRET;
 
   //Device Authorization Flow
   FDevice_Authorization_Flow := TDevice_Authorization_Flow.Create;
@@ -193,7 +212,7 @@ begin
         'Scope: ' + Scope);
   TIdSASLXOAuth(xOAuthSASL.SASL).Token := Access_Token;
   TIdSASLXOAuth(xOAuthSASL.SASL).ExpireTime := Expires_In;
-  TIdSASLXOAuth(xOAuthSASL.SASL).User := ''; // outlook email account
+  TIdSASLXOAuth(xOAuthSASL.SASL).User := EMAILACCOUNT; // outlook email account
 end;
 
 procedure TFormIMAPTest.OAuth2_Authorization_CodeAfterAuthorizeCode(Sender: TObject;
@@ -202,6 +221,20 @@ begin
   DoLog('Code: ' + Code + CRLF +
         'State: ' + State + CRLF +
         'Scope: ' + Scope);
+end;
+
+procedure TFormIMAPTest.OAuth2_Client_CredentialsAfterAccessToken(
+  Sender: TObject; const Access_Token, Token_Type, Expires_In, Refresh_Token,
+  Scope, RawParams: string; var Handled: Boolean);
+begin
+  DoLog('AccessToken: ' + Access_Token + CRLF +
+        'Token_Type: ' + Token_Type + CRLF +
+        'Expires_In: ' + Expires_In + CRLF +
+        'Refresh_Token: ' + Refresh_Token + CRLF +
+        'Scope: ' + Scope);
+  TIdSASLXOAuth(xOAuthSASL.SASL).Token := Access_Token;
+  TIdSASLXOAuth(xOAuthSASL.SASL).ExpireTime := Expires_In;
+  TIdSASLXOAuth(xOAuthSASL.SASL).User := EMAILACCOUNT; // outlook email account
 end;
 
 end.

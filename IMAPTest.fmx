@@ -3,7 +3,7 @@ object FormIMAPTest: TFormIMAPTest
   Top = 0
   Caption = 'IMAP-Test'
   ClientHeight = 471
-  ClientWidth = 648
+  ClientWidth = 816
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
@@ -25,39 +25,49 @@ object FormIMAPTest: TFormIMAPTest
     DataDetectorTypes = []
     Position.X = 8.000000000000000000
     Position.Y = 40.000000000000000000
-    Size.Width = 633.000000000000000000
+    Size.Width = 801.000000000000000000
     Size.Height = 425.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 4
-    Viewport.Width = 629.000000000000000000
+    Viewport.Width = 797.000000000000000000
     Viewport.Height = 421.000000000000000000
   end
   object btn_Test_outlook_IMAP: TButton
-    Position.X = 560.000000000000000000
+    Position.X = 728.000000000000000000
     Position.Y = 8.000000000000000000
     TabOrder = 5
     Text = 'Get IMAP'
     OnClick = btn_Test_outlook_IMAPClick
   end
   object btn_Device_Auth_Flow: TButton
-    Position.X = 200.000000000000000000
+    Position.X = 400.000000000000000000
     Position.Y = 8.000000000000000000
-    Size.Width = 225.000000000000000000
+    Size.Width = 193.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 10
+    TabOrder = 11
     Text = 'Use Device Authorization Flow'
     OnClick = btn_Device_Auth_FlowClick
   end
   object Button1: TButton
-    Position.X = 432.000000000000000000
+    Position.X = 600.000000000000000000
     Position.Y = 8.000000000000000000
     Size.Width = 121.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 14
+    TabOrder = 15
     Text = 'Use ROPC Flow'
     OnClick = Button1Click
+  end
+  object btn_Client_Credentials_Flow: TButton
+    Position.X = 200.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 193.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 10
+    Text = 'Use Client Credentials Flow'
+    OnClick = btn_Client_Credentials_FlowClick
   end
   object OAuth2_Authorization_Code: TsgcHTTP_OAuth2_Client
     LocalServerOptions.IP = '127.0.0.1'
@@ -92,14 +102,16 @@ object FormIMAPTest: TFormIMAPTest
     Top = 80
   end
   object IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL
+    Destination = 'outlook.office365.com:993'
+    Host = 'outlook.office365.com'
     MaxLineAction = maException
-    Port = 0
+    Port = 993
     DefaultPort = 0
     SSLOptions.Mode = sslmUnassigned
     SSLOptions.VerifyMode = []
     SSLOptions.VerifyDepth = 0
     Left = 480
-    Top = 144
+    Top = 232
   end
   object IdIMAP4: TIdIMAP4
     IOHandler = IdSSLIOHandlerSocketOpenSSL1
@@ -110,6 +122,32 @@ object FormIMAPTest: TFormIMAPTest
     AuthType = iatSASL
     MilliSecsToWaitToClearBuffer = 10
     Left = 480
-    Top = 208
+    Top = 296
+  end
+  object OAuth2_Client_Credentials: TsgcHTTP_OAuth2_Client
+    LocalServerOptions.IP = '127.0.0.1'
+    LocalServerOptions.Port = 8080
+    LocalServerOptions.SSL = False
+    LocalServerOptions.SSLOptions.VerifyCertificate = False
+    LocalServerOptions.SSLOptions.VerifyDepth = 0
+    LocalServerOptions.SSLOptions.Version = tlsUndefined
+    LocalServerOptions.SSLOptions.OpenSSL_Options.APIVersion = oslAPI_1_0
+    LocalServerOptions.SSLOptions.OpenSSL_Options.LibPath = oslpNone
+    LocalServerOptions.SSLOptions.OpenSSL_Options.UnixSymLinks = oslsSymLinksDefault
+    LocalServerOptions.SSLOptions.OpenSSL_Options.ECDHE = False
+    LocalServerOptions.SSLOptions.Port = 0
+    OAuth2Options.GrantType = auth2ClientCredentials
+    HTTPClientOptions.TLSOptions.VerifyCertificate = False
+    HTTPClientOptions.TLSOptions.VerifyDepth = 0
+    HTTPClientOptions.TLSOptions.Version = tlsUndefined
+    HTTPClientOptions.TLSOptions.IOHandler = iohOpenSSL
+    HTTPClientOptions.TLSOptions.OpenSSL_Options.APIVersion = oslAPI_1_0
+    HTTPClientOptions.TLSOptions.OpenSSL_Options.LibPath = oslpNone
+    HTTPClientOptions.TLSOptions.OpenSSL_Options.UnixSymLinks = oslsSymLinksDefault
+    HTTPClientOptions.TLSOptions.SChannel_Options.CertStoreName = scsnMY
+    HTTPClientOptions.TLSOptions.SChannel_Options.CertStorePath = scspStoreCurrentUser
+    OnAfterAccessToken = OAuth2_Client_CredentialsAfterAccessToken
+    Left = 480
+    Top = 152
   end
 end
