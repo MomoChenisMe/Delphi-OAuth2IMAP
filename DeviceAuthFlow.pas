@@ -2,7 +2,7 @@ unit DeviceAuthFlow;
 
 interface
 
-uses System.Classes, System.SysUtils, System.JSON, System.Threading, System.Net.URLClient, Winapi.ShellAPI, FMX.Types, IdHTTP;
+uses System.Classes, System.SysUtils, System.JSON, System.Threading, System.Net.URLClient, Winapi.ShellAPI, FMX.Types, IdHTTP, IdSSLOpenSSL;
 
 type
   TOnAfterAuthorizeCode = reference to procedure(AuthCode: string);
@@ -32,6 +32,7 @@ type
     FExpire_In: Integer;
     FInterval: Integer;
     IdHTTP_Device_Authorization: TIdHTTP;
+    LHandler: TIdSSLIOHandlerSocketOpenSSL;
     FTimer_Device_Auth_Interval: TTimer;
     FOnAfterAuthorizeCode: TOnAfterAuthorizeCode;
     FOnAfterAuthorizeGetExpireTime: TOnAfterAuthorizeGetExpireTime;
@@ -61,7 +62,14 @@ begin
   FClientID := '';
   FTenantID := '';
   FScope := '';
+  LHandler := TIdSSLIOHandlerSocketOpenSSL.Create(nil);
+  LHandler.SSLOptions.SSLVersions := [sslvTLSv1_2];
+  LHandler.SSLOptions.Mode := sslmClient;
+  LHandler.SSLOptions.VerifyMode := [];
+  LHandler.SSLOptions.VerifyDepth := 0;
+
   IdHTTP_Device_Authorization := TIdHTTP.Create(nil);
+  IdHTTP_Device_Authorization.IOHandler := LHandler;
   IdHTTP_Device_Authorization.Request.ContentEncoding := 'UTF-8';
   IdHTTP_Device_Authorization.Request.ContentType := 'application/x-www-form-urlencoded';
   FTimer_Device_Auth_Interval := TTimer.Create(nil);
@@ -71,6 +79,7 @@ end;
 
 destructor TDevice_Authorization_Flow.Destroy;
 begin
+  if Assigned(LHandler) then FreeAndNil(LHandler);
   if Assigned(IdHTTP_Device_Authorization) then FreeAndNil(IdHTTP_Device_Authorization);
   if Assigned(FTimer_Device_Auth_Interval) then FreeAndNil(FTimer_Device_Auth_Interval);
   inherited;

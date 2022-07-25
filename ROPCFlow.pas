@@ -2,7 +2,7 @@ unit ROPCFlow;
 
 interface
 
-uses System.Classes, System.SysUtils, System.JSON, System.Threading, System.Net.URLClient, Winapi.ShellAPI, IdHTTP;
+uses System.Classes, System.SysUtils, System.JSON, System.Threading, System.Net.URLClient, Winapi.ShellAPI, IdHTTP, IdSSLOpenSSL;
 
 type
   TOnErrorAccessToken = reference to procedure(Error, ErrorDescription: string);
@@ -29,6 +29,7 @@ type
     FExpire_In: Integer;
     FInterval: Integer;
     IdHTTP_ROPC: TIdHTTP;
+    LHandler: TIdSSLIOHandlerSocketOpenSSL;
     FOnAfterAccessToken: TOnAfterAccessToken;
     FOnErrorAccessToken: TOnErrorAccessToken;
   public
@@ -56,13 +57,21 @@ begin
   FScope := '';
   FUsername := '';
   FPassword := '';
+  LHandler := TIdSSLIOHandlerSocketOpenSSL.Create(nil);
+  LHandler.SSLOptions.SSLVersions := [sslvTLSv1_2];
+  LHandler.SSLOptions.Mode := sslmClient;
+  LHandler.SSLOptions.VerifyMode := [];
+  LHandler.SSLOptions.VerifyDepth := 0;
+
   IdHTTP_ROPC := TIdHTTP.Create(nil);
+  IdHTTP_ROPC.IOHandler := LHandler;
   IdHTTP_ROPC.Request.ContentEncoding := 'UTF-8';
   IdHTTP_ROPC.Request.ContentType := 'application/x-www-form-urlencoded';
 end;
 
 destructor TROPC_Flow.Destroy;
 begin
+  if Assigned(LHandler) then FreeAndNil(LHandler);
   if Assigned(IdHTTP_ROPC) then FreeAndNil(IdHTTP_ROPC);
   inherited;
 end;
