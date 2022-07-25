@@ -2,6 +2,11 @@
 
 use delphi IMAP to authenticate with OAuth2.0 for Microsoft Outlook
 
+# Update
+- 2022/07/25 
+  - DeviceAuthFlow/ROPCFlow Add TLS1.2
+  - Add Client Credentials Flow to authenticate IMAP
+
 ## Azure Active Directory設定
 - [Azure Active Directory註冊應用程式](https://abyssinian-search-6ce.notion.site/OAuth2-0-b36d50d694a8445e9abb15f65ee578ec)
 - [Azure Active Directory測試授權](https://abyssinian-search-6ce.notion.site/OAuth2-0-539947c37fed4345be57500a8eea6cb1)
