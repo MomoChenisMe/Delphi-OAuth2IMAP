@@ -9,7 +9,7 @@ use delphi IMAP to authenticate with OAuth2.0 for Microsoft Outlook
 
 ## Azure Active Directory設定
 - [Azure Active Directory註冊應用程式](https://www.momochenisme.com/2023/01/azure-active-directory-application-registration.html)
-- [Azure Active Directory測試授權](https://abyssinian-search-6ce.notion.site/OAuth2-0-539947c37fed4345be57500a8eea6cb1)
+- [Azure Active Directory測試授權](https://www.momochenisme.com/2023/01/azure-oauth20-test.html)
 
 ## Delphi
 - [Authorization Code Flow授權碼流程](https://www.momochenisme.com/2023/01/delphi-authorization-code.html)
