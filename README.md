@@ -3,6 +3,8 @@
 use delphi IMAP to authenticate with OAuth2.0 for Microsoft Outlook
 
 # Update
+- 2023/04/26
+  - Update TSL 1.0 to TSL 1.2
 - 2022/07/25 
   - DeviceAuthFlow/ROPCFlow Add TLS1.2
   - Add Client Credentials Flow to authenticate IMAP
