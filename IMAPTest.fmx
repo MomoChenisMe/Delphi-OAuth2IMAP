@@ -107,6 +107,8 @@ object FormIMAPTest: TFormIMAPTest
     MaxLineAction = maException
     Port = 993
     DefaultPort = 0
+    SSLOptions.Method = sslvTLSv1_2
+    SSLOptions.SSLVersions = [sslvTLSv1_2]
     SSLOptions.Mode = sslmUnassigned
     SSLOptions.VerifyMode = []
     SSLOptions.VerifyDepth = 0
